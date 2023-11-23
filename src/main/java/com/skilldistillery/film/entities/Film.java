@@ -17,26 +17,12 @@ public class Film {
 	private double repCost;
 	private String rating;
 	private String features;
+	private String category;
 	private List<Actor> actors;
 
-	public Film(int id, String title, short releaseYear, String desc, int langId, int rentDur, double rate, int length,
-			double repCost, String rating, String features) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.releaseYear = releaseYear;
-		this.desc = desc;
-		this.langId = langId;
-		this.rentDur = rentDur;
-		this.rate = rate;
-		this.length = length;
-		this.repCost = repCost;
-		this.rating = rating;
-		this.features = features;
-	}
 
-	public Film(int id, String title, short releaseYear, String desc, int langId, int rentDur, double rate, int length,
-			double repCost, String rating, String features, List<Actor> actors) {
+	public Film(int id, String title, short releaseYear, String desc, int langId, String languageName, int rentDur, double rate, int length,
+			double repCost, String rating, String features, String category, List<Actor> actors) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -49,6 +35,8 @@ public class Film {
 		this.repCost = repCost;
 		this.rating = rating;
 		this.features = features;
+		this.languageName = languageName;
+		this.category = category;
 		this.actors = actors;
 	}
 
@@ -144,9 +132,23 @@ public class Film {
 	public String getFeatures() {
 		return features;
 	}
+	public String getLanguageName() {
+		return languageName;
+	}
+	
+	public void setLanguageName(String languageName) {
+		this.languageName = languageName;
+	}
 
 	public void setFeatures(String features) {
 		this.features = features;
+	}
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	@Override
@@ -176,6 +178,8 @@ public class Film {
 	public String toString() {
 		return "Title: " + title + ", Release Year: " + releaseYear + ", Rating: " + rating + "\nDescription: " + desc;
 	}
+
+
 
 	// only display that actos film's title
 

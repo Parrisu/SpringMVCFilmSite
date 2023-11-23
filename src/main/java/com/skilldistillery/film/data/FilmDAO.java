@@ -9,5 +9,6 @@ public interface FilmDAO {
 	Film findFilmById(int filmId);
 	List<Film> searchByKeyword(String keyword);
 	List<Actor> findActorsByFilmId(int filmId);
-	List<Film> findFilmByKeyword(String keyword);
+	String findLanguagebyFilmID(int filmID);
+	String findCategorybyFilmID(int filmID);
 }

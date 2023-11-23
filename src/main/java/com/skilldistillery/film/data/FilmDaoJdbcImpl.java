@@ -46,15 +46,16 @@ public class FilmDaoJdbcImpl implements FilmDAO {
 			String desc = rs.getString("description");
 			short releaseYear = rs.getShort("release_year");
 			int langId = rs.getInt("language_id");
+			String language  = findLanguagebyFilmID(filmId1);
 			int rentDur = rs.getInt("rental_duration");
 			double rate = rs.getDouble("rental_rate");
 			int length = rs.getInt("length");
 			double repCost = rs.getDouble("replacement_cost");
 			String rating = rs.getString("rating");
 			String features = rs.getString("special_features");
+			String category = findCategorybyFilmID(filmId1);
 			List<Actor> filmActors = findActorsByFilmId(filmId1);
-			film = new Film(filmId1, title, releaseYear, desc, langId, rentDur, rate, length, repCost, rating, features,
-					filmActors);
+			film = new Film(filmId1, title, releaseYear, desc, langId, language, rentDur, rate, length, repCost, rating, features, category, filmActors);
 		}
 		rs.close();
 		stmt.close();
@@ -66,7 +67,7 @@ public class FilmDaoJdbcImpl implements FilmDAO {
 	}
 	
 	@Override
-	public List<Film> findFilmByKeyword(String keyword) {
+	public List<Film> searchByKeyword(String keyword) {
 		List<Film> films = new ArrayList<>();
 		
 		try {
@@ -87,15 +88,17 @@ public class FilmDaoJdbcImpl implements FilmDAO {
 			String desc = rs.getString("description");
 			short releaseYear = rs.getShort("release_year");
 			int langId = rs.getInt("language_id");
+			String language = findLanguagebyFilmID(filmId);
 			int rentDur = rs.getInt("rental_duration");
 			double rate = rs.getDouble("rental_rate");
 			int length = rs.getInt("length");
 			double repCost = rs.getDouble("replacement_cost");
 			String rating = rs.getString("rating");
 			String features = rs.getString("special_features");
+			String category = findCategorybyFilmID(filmId);
 			List<Actor> filmActors = findActorsByFilmId(filmId);
-			film = new Film(filmId, title, releaseYear, desc, langId, rentDur, rate, length, repCost, rating, features,
-					filmActors);
+			film = new Film(filmId, title, releaseYear, desc, langId, language, rentDur, rate, length, repCost, rating, features, category, filmActors);
+
 			films.add(film);
 
 		}
@@ -136,11 +139,53 @@ public class FilmDaoJdbcImpl implements FilmDAO {
 		}
 		return actors;
 	}
-
+	
 	@Override
-	public List<Film> searchByKeyword(String keyword) {
-		
-		return null;
+	public String findLanguagebyFilmID(int filmID) {
+		String language = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PW);
+
+			String sql = "SELECT name FROM language l JOIN film f ON l.id = f.language_id WHERE f.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				language = rs.getString("name");
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return language;
+	}
+	@Override
+	public String findCategorybyFilmID(int filmID) {
+		String language = null;
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PW);
+			
+			String sql = "SELECT name FROM category c "
+					+ "JOIN film_category fc ON c.id = fc.category_id "
+					+ "JOIN film f ON fc.film_id = f.id "
+					+ "WHERE f.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmID);
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				language = rs.getString("name");
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return language;
 	}
 
 }
